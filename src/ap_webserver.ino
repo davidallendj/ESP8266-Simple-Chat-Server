@@ -14,7 +14,7 @@ DNSServer				dns_server;
 LiquidCrystal_I2C		lcd(LCD_ADDRESS, LCD_COL_COUNT, LCD_ROW_COUNT); // set lcd address to 0x27 for 16x2 chars
 rfid_t 					rfid_reader(RFID_RC522_PIN_SS, RFID_RC522_PIN_RST);
 rfid_key_t				rfid_key;
-// user_list 			users;
+user_list 				users;
 message_queue 			sent_messages;
 message_queue			unsent_messages;
 unsigned long 			start_time	= millis();
@@ -48,19 +48,24 @@ void setup() {
 	dns_server.setTTL(300);
 	dns_server.setErrorReplyCode(DNSReplyCode::ServerFailure);
 	// dns_server.start(DNS_PORT, DOMAIN_NAME, WiFi.localIP());
-	dns_server.start(DNS_PORT, "*", WiFi.softAPIP());
+	dns_server.start(DNS_PORT, DOMAIN_NAME, WiFi.softAPIP());
 
 	// Initialize LittleFS
 	if (!LittleFS.begin()) {
-		Serial.println(F("An error has occurred mounting SPIFFS"));
+		Serial.println(F("An error has occurred mounting LittleFS"));
 		return;
 	}
 
 	web_events.onConnect([](AsyncEventSourceClient *client){
 		if(client->lastId()){
 			Serial.printf("Client connected. Last message ID: %u", client->lastId());
+
+			// Add user to user list when connected
 		}
-		client->send("hello", NULL, millis(), 1000);
+	});
+
+	web_server.on("/disconnect", [](AsyncWebServerRequest *request){
+		request->client()->remoteIP();
 	});
 
 	// basic http authentication

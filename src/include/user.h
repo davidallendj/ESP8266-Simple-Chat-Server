@@ -30,6 +30,7 @@ public:
 	bool has_user_ip(ip_address_t ip_addr);
 	bool has_user(string_t name, ip_address_t ip_addr);
 	bool has_user(const user_t& user);
+	void remove_user(ip_address_t ip_addr);
 	
 private:
 	std::vector<opt<user_t>> m_users;

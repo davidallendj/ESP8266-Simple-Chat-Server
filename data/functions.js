@@ -27,7 +27,15 @@ function init_client(messages){
 			console.log("init_client().messages: ", messages);
 			document.getElementById("message_list").innerHTML = format_messages(messages);
 		});
+
 	}
+
+	// Send request to server saying we're shutting down
+	document.addEventListener("visibilitychange", function(e){
+		if(document.visibilityState === "hidden"){
+			navigator.sendBeacon('/disconnect');
+		}
+	})
 }
 
 function parse_messages(data){
