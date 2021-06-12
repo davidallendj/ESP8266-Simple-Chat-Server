@@ -1,7 +1,6 @@
-// TODO: Make communication through microphone and speaker
 // TODO: Replace "Submit" with asynchronous AJAX calls (DONE!)
-// TODO: Send minimal data when make a request from server
-// TODO: Use sockets to only push data to clients instead of constant polling
+// TODO: Minimize data being sent when make a request from server (DONE!)
+// TODO: Use sockets to only push data to clients instead of constant polling (DONE!)
 #include "include/message.h"
 #include "include/rfid.h"
 #include "include/utils.h"
@@ -9,7 +8,7 @@
 
 //WiFiServer web_server(SERVER_PORT);
 AsyncWebServer 			web_server(SERVER_PORT);
-AsyncWebSocket			web_sockets("/sockets");
+AsyncWebSocket			web_sockets("/web_sockets");
 AsyncEventSource		web_events("/web_events");
 DNSServer				dns_server;
 LiquidCrystal_I2C		lcd(LCD_ADDRESS, LCD_COL_COUNT, LCD_ROW_COUNT); // set lcd address to 0x27 for 16x2 chars
@@ -40,9 +39,6 @@ void setup() {
 	WiFi.hostname(DOMAIN_NAME);
 
 	ip_address_t ip_addr = WiFi.softAPIP();
-	//ip_address_t dns(192, 168, 4, 1);
-	//ip_address_t gateway(192, 168, 1, 1);
-	//ip_address_t subnet(255, 255, 0, 0);
 	Serial.println("ip address: " + ip_addr.toString());
 
 	// Print the ESP8266 local ip address
