@@ -1,0 +1,128 @@
+@keyframes color-rotation{
+	0%		{ background-color: purple; }
+	20%		{ background-color: blue; }
+	40%		{ background-color: green; }
+	60%		{ background-color: orange; }
+	80% 	{ background-color: yellow; }
+	100%	{ background-color: red; }
+}
+@keyframes fade-in {
+	from	{ opacity: 			0; }
+	to 		{ opacity: 			0.85; }
+}
+.fade{
+	animation-name:				fade-in;
+	animation-duration: 		1s;
+	animation-timing-function: 	ease-in;
+}
+.background{
+	animation-name:				color-rotation;
+	animation-duration: 		30s;
+	animation-iteration-count: 	infinite;
+	animation-timing-function: 	linear;
+	animation-direction: 		alternate;
+	animation-delay: 			2s;
+	background-color: 			purple;
+	opacity: 					0.95;
+}
+.wrapper{
+	background:		#eee;
+	opacity: 		1.0;
+	margin:			0 auto;
+	/* margin-top:		100px; */
+	max-width:		800px;
+	min-width: 		400px;
+	padding-right:	16px;
+	padding-left:	16px;
+	padding-top:	12px;
+	padding-bottom: 12px;
+	box-shadow: 	6px 6px rgba(60, 60, 60, 0.45);
+}
+.row:after{
+	display:		table;
+	clear:			both;
+	content:		"";
+}
+.button			{ 
+	display: 		block;
+	border: 		none;
+	background-color: #aaa;
+	cursor: 		pointer;
+	width:			150px;
+	height:			40px;
+	box-shadow: 	6px 6px rgba(60, 60, 60, 0.45);
+}
+.relative{
+	position:		relative;
+	margin: 		0px;
+}
+.horizontal{
+	display: 		inline-block;
+}
+.vertical{
+	display:		block;
+}
+.button:hover {
+	background-color: #ddd;
+}
+.bottom-pane{
+	background-color: #eee;
+	width:				100%;
+	height:				fit-content;
+	padding:			8px;
+	right: 				0;
+	left:				0;
+	bottom:				0;
+	z-index: 			999;
+}
+.right{
+	/* float:				right; */
+	margin-left: 		auto;
+	margin-right:		0;
+}
+.shadow 		{ box-shadow: 	6px 6px rgba(60, 60, 60, 0.45);
+}
+.separator		{ border-right: 1px; }
+.container		{ width: 500px; clear: both; }
+.container input{ width: 100%; clear: both; }
+form			{ display: block; }
+h4				{ margin-top: 6px; margin-bottom: 4px; }
+p				{ margin-top: 8px; margin-bottom: 8px; }
+input			{ 
+	/* display:		block; */
+	font-weight: 	bold;
+	border: 		0px;
+	outline:		none;
+	font-family:	monospace;
+	font-size:		16px;
+	font-weight: 	lighter;
+	margin: 		0px;
+}
+textarea		{ 
+	display: 		block;
+	border: 		0px;
+	outline: 		none;
+	width:			max-content;
+	height: 		100px;
+	min-width: 		40%;
+	max-width: 		50%;
+	min-height:		50px;
+	max-height: 	100px;
+	font-family:	monospace;
+	font-size:		16px;
+	resize: 		none;
+}
+label {
+	display:		inline-block;
+	width:			30px;
+	margin:			2px 4px;
+	text-align:		right; 
+}
+html{
+	font-family:	monospace;
+	font-size:		16px;
+	margin: 		0px;
+}
+body{
+	margin-bottom: 	200px;
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+	<script src="functions.js" type="text/javascript"></script>
+	<head>
+		<link rel="stylesheet" type="text/css" href="styles.css">
+		<title>ESP8266 SERVER (WIP)</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	</head>
+	<form class="fade bottom-pane" autocomplete="off" style="position: fixed">
+		<div class="" style="display: flex;">
+			<!-- <div style="display: flex;">
+			</div> -->
+				<!-- <label><input id="notification_bell" type="checkbox" checked="true"/>Enable Sound</label> -->
+				<input id="user" class="shadow" type="text" placeholder="Name?" style="max-height: 30px;" autocomplete="off" autofocus="on">
+				<textarea id="message" class="shadow" rows="5" cols="80" placeholder="Say something..." type="text" autocomplete="off" maxlength="100" onkeyup="textarea_counter('textarea_label')"></textarea>
+				<input id="send_button" class="shadow button" type="button" value="Send" onclick="send_message('user', 'message')">
+				<label id="textarea_label" value="100 characters remaining"></label>
+		</div>
+	</form>
+	<body class="background" onload="load_messages(messages); init_client(messages);">
+		<div class="fade wrapper">
+			<div>
+				<h2><b>CONNECTED TO ESP8266@192.168.4.1</b></h2>
+				<p>
+					This is a local, test communication server using an ESP8266 MCU. It is updated frequently
+					so expect bugs.
+				</p>
+				<p>
+					Enter a name and send a message. The message will appear below and is visible to anyone else
+					connected to the access point. It's just that easy! Messages are deleted every time the device is reset and the 
+					oldest messages after hitting the 32 message limit.
+				</p>	
+				<p>
+					It's not my fault if something breaks so use at your own risk!
+				</p>
+			</div>
+			<div class="separator"></div>			
+			<div id="message_list">
+			</div>
+		</div> <!-- Wrapper -->
+	</body>
+	<script>		
+		var input = document.getElementById("message");
+		input.addEventListener("keydown", function(event){
+			if(event.keyCode === 13){
+				event.preventDefault();
+				document.getElementById("send_button").click();
+			}
+		});
+	</script>
+</html>
