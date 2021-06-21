@@ -10,6 +10,22 @@
 	from	{ opacity: 			0; }
 	to 		{ opacity: 			0.85; }
 }
+#user_list{
+	display:					block;
+	clear:						left;
+}
+#brush{
+	width:						30px;
+	height:						30px;
+	border-radius:				50%;
+	position:					fixed;
+	display:					none;
+}
+.shadow 		{ box-shadow: 	6px 6px 2px 2px rgba(60, 60, 60, 0.45);}
+.scroll{
+	overflow-x: 				hidden;
+	overflow-y: 				auto;
+}
 .fade{
 	animation-name:				fade-in;
 	animation-duration: 		1s;
@@ -29,28 +45,25 @@
 	background:		#eee;
 	opacity: 		1.0;
 	margin:			0 auto;
-	/* margin-top:		100px; */
 	max-width:		800px;
 	min-width: 		400px;
 	padding-right:	16px;
 	padding-left:	16px;
 	padding-top:	12px;
 	padding-bottom: 12px;
-	box-shadow: 	6px 6px rgba(60, 60, 60, 0.45);
 }
 .row:after{
 	display:		table;
 	clear:			both;
 	content:		"";
 }
-.button			{ 
+.button	.shadow		{ 
 	display: 		block;
 	border: 		none;
 	background-color: #aaa;
 	cursor: 		pointer;
 	width:			150px;
 	height:			40px;
-	box-shadow: 	6px 6px rgba(60, 60, 60, 0.45);
 }
 .relative{
 	position:		relative;
@@ -65,49 +78,60 @@
 .button:hover {
 	background-color: #ddd;
 }
-.bottom-pane{
+.bottom-pane {
 	background-color: #eee;
+	position: 			fixed;
+	justify-content: 	center;
+	margin:				0 auto;
 	width:				100%;
-	height:				fit-content;
-	padding:			8px;
+	height:				10%;
+	padding:			0 4%;
 	right: 				0;
 	left:				0;
 	bottom:				0;
 	z-index: 			999;
 }
 .right{
-	/* float:				right; */
+	/* float:			right; */
 	margin-left: 		auto;
 	margin-right:		0;
 }
-.shadow 		{ box-shadow: 	6px 6px rgba(60, 60, 60, 0.45);
-}
 .separator		{ border-right: 1px; }
-.container		{ width: 500px; clear: both; }
+.container .shadow	{ 
+	width: 			200px;
+	height:			8px;
+}
 .container input{ width: 100%; clear: both; }
+.alt-a			{ background-color: #aaa; padding: 8px; margin: 0px; }
+.alt-b			{ background-color: #ccc; padding: 8px; margin: 0px; }
 form			{ display: block; }
-h4				{ margin-top: 6px; margin-bottom: 4px; }
+h4				{ margin-top: 6px; margin-bottom: 6px; }
 p				{ margin-top: 8px; margin-bottom: 8px; }
 input			{ 
 	/* display:		block; */
 	font-weight: 	bold;
+	/* min-width: 		30%; */
 	border: 		0px;
 	outline:		none;
 	font-family:	monospace;
 	font-size:		16px;
 	font-weight: 	lighter;
 	margin: 		0px;
+	transition:		all	1s;
 }
+/* input:hover		{
+	width:			300px;
+} */
 textarea		{ 
 	display: 		block;
 	border: 		0px;
 	outline: 		none;
-	width:			max-content;
-	height: 		100px;
-	min-width: 		40%;
-	max-width: 		50%;
-	min-height:		50px;
-	max-height: 	100px;
+	width:			20%;
+	height: 		80px;
+	min-width: 		20%;
+	max-width: 		40%;
+	min-height:		40px;
+	max-height: 	80px;
 	font-family:	monospace;
 	font-size:		16px;
 	resize: 		none;

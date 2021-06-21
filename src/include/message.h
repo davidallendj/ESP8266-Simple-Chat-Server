@@ -5,35 +5,38 @@
 #include "user.h"
 #include "reverse.h"
 #include "constants.h"
-#include "typedefs.h"
+#include "types.h"
 #include "utils.h"
 
 /* Example JSON file storing messages to disk
-	{
-		"count": 2,
-		"messages":[
-			{
-				"sender": {
-					"name": 		"elementary.os",
-					"ip addr": 		[192, 168, 4, 2]		// save to init IPAddress
-				},
-				"contents": 		"hello world",
-				"timestamp": 		"2021-6-8 06:43:21 PM"
+{
+	"count": 2,
+	"messages":[
+		{
+			"id":				112,
+			"sender": {
+				"name": 		"elementary.os",
+				"ip_addr": 		[192, 168, 4, 2]		// save to init IPAddress
 			},
-			{
-				"sender": {
-					"name":			"manjaro"
-					"ip addr":		[192, 168, 4, 3]
-				},
-				"contents":			"goodbye world",
-				"timestamp":		"2021-6-8 06:43:34 PM"
-			}
-		]
-	}
-	*/
+			"contents": 		"hello world",
+			"timestamp": 		"2021-6-8 06:43:21 PM"
+		},
+		{
+			"id":				113,
+			"sender": {
+				"name":			"manjaro",
+				"ip_addr":		[192, 168, 4, 3]
+			},
+			"contents":			"goodbye world",
+			"timestamp":		"2021-6-8 06:43:34 PM"
+		}
+	]
+}
+*/
 
 
 typedef struct _message{
+	size_t			id;
 	user_t 			sender;
 	string_t		contents;
 	string_t		timestamp;
@@ -60,6 +63,7 @@ public:
 	void set_message_status(size_t index, bool status);
 	void clear();
 	
+	static size_t counter;
 private:
 	// FIFO queue to push new messages and pop old ones
 	std::deque<message_t> m_messages;
@@ -67,19 +71,16 @@ private:
 
 
 void message_queue::add_message(const message_t& message){
-	// Check if we've reach our message limit
-	if(m_messages.size() > MAX_MESSAGES){
-		// Pop the message at the front of the queue
+	// If as message limit, pop front/push back if we are
+	if(m_messages.size() > MAX_MESSAGES)
 		m_messages.pop_front();
-	}
-	
-	// Then, push new message to the back
 	m_messages.push_back(message);
 }
 
 
 void message_queue::add_message(const user_t& sender, string_t contents, string_t timestamp){
 	message_t m { 
+		.id			= counter++,
 		.sender		= sender, 
 		.contents	= contents, 
 		.timestamp	= timestamp
@@ -115,11 +116,13 @@ string_t message_queue::to_json(size_t from) const{
 
 
 string_t message_queue::to_json(size_t from, size_t to) const{
-	string_t json("{\n\t\"messages\":[\n");
+	string_t json("{\n\t\"type\": \"message\",\n\t\"messages\":[\n");
 	for(size_t i = from; i < to; i++){
 		message_t message = m_messages[i];
 		json += "\t\t{\n";
+		json += "\t\t\"id\": " + string_t(message.id) + ",\n";
 		json += "\t\t\"sender\":{\n";
+		json += "\t\t\t\"client_id\": " + string_t(message.sender.client_id) + ",\n";
 		json += "\t\t\t\"name\": \"" + message.sender.name + "\",\n";
 		json += "\t\t\t\"ip_addr\":[" 
 			+ string_t(message.sender.ip_addr[0]) + ", "
@@ -131,7 +134,8 @@ string_t message_queue::to_json(size_t from, size_t to) const{
 		json += "\t\t\"timestamp\":\"" + message.timestamp + "\"\n";
 		json += "\t\t},";
 	}
-	json.remove(json.length()-1, 1);
+	if(!json.isEmpty())
+		json.remove(json.length()-1, 1);
 	json += "\n\t]\n}\n";
 	return json;
 }
@@ -199,4 +203,16 @@ void message_queue::load_from_json_file(string_t path){
 
 void message_queue::clear(){
 	m_messages.clear();
+}
+
+
+string_t to_json(const message_t& message){
+	const auto& sender = message.sender;
+	string_t json = "{";
+	json += "\"id\": " + string_t(message.id) +",\n";
+	json += "\"sender\": " + to_json(sender) + ",\n";
+	json += "\"contents\": \"" + message.contents + "\",\n"; 
+	json += "\"timestamp\": \"" + message.timestamp + "\",\n";
+	json += "}\n";
+	return json;
 }

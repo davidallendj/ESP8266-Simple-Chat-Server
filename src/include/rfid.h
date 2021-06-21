@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SPI.h>
-#include "typedefs.h"
+#include "types.h"
 
 // first data that is sent from tag is UID and PICC type
 // which identifies the tag
@@ -34,6 +34,11 @@ void get_uid(string_t content, const rfid_t& rfid){
 		Serial.println("Wrong tag");
 }
 
+void rfid_init(rfid_t& rfid){
+	rfid.PCD_Init();
+	rfid.PCD_DumpVersionToSerial();
+}
+
 void rfid_update(rfid_t& rfid){
 	// Reset loop if no new card present
 	if(!rfid.PICC_IsNewCardPresent())
@@ -60,6 +65,9 @@ void rfid_update(rfid_t& rfid){
 
 	String content = "";
 	get_uid(content, rfid);
+
+	// Dump card info
+	rfid.PICC_DumpToSerial(&(rfid.uid));
 
 	// Halt PICC
 	rfid.PICC_HaltA();

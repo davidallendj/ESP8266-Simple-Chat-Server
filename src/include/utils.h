@@ -11,7 +11,8 @@
 
 #include <vector>
 #include <algorithm>
-#include "typedefs.h"
+#include "types.h"
+
 
 template <typename Container, typename Predicate = std::function<void()>>
 auto find_if(Container c, Predicate p){
@@ -26,12 +27,14 @@ auto for_each(Container c, Predicate p){
 string_t load_from_file(const char *path);
 void save_to_file(const char *path, string_t contents, bool append=false);
 string_t load_html(const char* path);
-datetime_t convert_to_datetime(unsigned long time_in_ms, string_t fmt="");
-string_t format_datetime(const datetime_t& t, bool show_date=false, bool show_time=true);
 void not_found(AsyncWebServerRequest *request);
 std::vector<wlan_network_t> scan_networks();
 std::vector<ip_address_t> scan_clients();
 void scan_i2c();
+void handle_message(AsyncWebSocket *server, AsyncWebSocketClient *client, void *arg, uint8_t *data, size_t len);
+void on_event(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len);
+void notify_all(AsyncWebSocket *server, char *text);
+const char* get_random_name();
 
 
 string_t load_from_file(const char *path){
@@ -63,50 +66,6 @@ void save_to_file(const char *path, string_t contents, bool append){
 	// Write contents to file and close
 	file.write(contents.c_str());
 	file.close();
-}
-
-
-datetime_t convert_to_datetime(unsigned long time_in_ms, string_t fmt){
-	datetime_t t{
-		.years    = 0,
-		.months   = 0,
-		.days     = 0,
-		.hours    = 0,
-		.minutes  = 0,
-		.seconds  = 0.0f
-	};
-	t.seconds = time_in_ms / 1000; 
-	while(t.seconds > 60.0f){
-		t.seconds   -= 60.0f;
-		t.minutes   += 1;
-		while(t.minutes > 60){
-			t.minutes -= 60;
-			t.hours   += 1;
-			while(t.hours > 24){
-				t.hours -= 24;
-				t.days  += 1;
-			}
-		}
-	}
-	return t;
-}
-
-
-string_t format_datetime(const datetime_t& t, bool show_date, bool show_time){
-	string_t fmt = "";
-	if(show_date){
-		fmt += (t.months > 0) ? string_t(t.months) + "." : "";
-		fmt += (t.days > 0) ? string_t(t.days) + "." : "";
-		fmt += (t.years > 0) ? string_t(t.years) + " " : "";
-	}
-
-	if(show_time){
-		fmt += (t.hours > 0) ? string_t(t.hours) + ":" : "";
-		fmt += (t.minutes > 0) ? string_t(t.minutes) + ":" : "";
-		fmt += t.seconds;
-	}
-	
-	return fmt;
 }
 
 
@@ -148,7 +107,7 @@ std::vector<ip_address_t> scan_clients(){
 	// struct ip_addr 			*ip;
 	std::vector<ip_address_t>	ip_addrs;
 	struct station_info 		*stat_info		= wifi_softap_get_station_info();
-	// unsigned char 				station_count	= wifi_softap_get_station_num();
+	// unsigned char 			station_count	= wifi_softap_get_station_num();
 
 	while(stat_info != nullptr){
 		// ip = stat_info->ip;
@@ -157,6 +116,7 @@ std::vector<ip_address_t> scan_clients(){
 	}
 	return ip_addrs;
 }
+
 
 void scan_i2c(){
 	byte error, address;
@@ -184,4 +144,14 @@ void scan_i2c(){
 			}
 		}
 	}
+}
+
+
+void notify_all(AsyncWebSocket *server, const char *text){
+	server->textAll(text);
+}
+
+
+const char* get_random_name(){
+	return names[random(0, names.size()-1)];
 }
