@@ -4,9 +4,17 @@ A local, simple chat server built for the ESP8266 written in primarily in C++ 17
 
 The project also includes functionality for other devices, including a RFID RC522 card reader and a LCD screen with I2C adapter module. This functionality will likely be changed to be configed using these devices. A diagram will be included later to show how the circuit is wired.
 
-## How to Run
+## Getting Started
 
-The project is normally ran using the PlatformIO extension in Visual Studio Code. Select the PlatformIO tab, click `Build` and then `Upload` to the device. Make sure that the correct device is selected (ESP8266) or else the upload may failed. This has not been tested to work on an ESP32 or its variants.
+The project is typically ran using the PlatformIO extension in Visual Studio Code. The project should also work with Arduino IDE, but may require more effort to get working. The instruction below are only for PlatformIO + VS Code.
+
+First clone the repository:
+
+```bash
+git clone https://github.com/davidallendj/ESP8266-Simple-Chat-Server
+```
+
+Then, open the project in VS code by going to `File -> Open Folder` and select where you cloned the project. Next, select the PlatformIO tab, click `Build` and then `Upload` to the device. Make sure that the correct device is selected (ESP8266) or else the upload may failed. This has not been tested to work on an ESP32 or its variants.
 
 ## Future Work
 
@@ -22,7 +30,7 @@ The project is normally ran using the PlatformIO extension in Visual Studio Code
 
 *   [ ] Create interface for monitor/changing device state
 
-*   [ ] Create interface to connect to antoher Wi-Fi access point
+*   [ ] Create interface to connect to another Wi-Fi access point
 
 *   [ ] Use captive portal to redirect connections to a landing page
 
@@ -32,5 +40,5 @@ The project is normally ran using the PlatformIO extension in Visual Studio Code
 
 *   [x] Minimize data being sent when making a request from server
 
-*   [x] Replace "Submit" with asynchronous AJAX calls
+*   [x] Replace "Submit" call with asynchronous AJAX calls
 

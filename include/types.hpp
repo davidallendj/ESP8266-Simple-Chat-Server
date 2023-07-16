@@ -11,9 +11,12 @@
 // #include <ESP8266mDNS.h>
 #include <DNSServer.h>
 
+
 namespace {
 	using string_t 					= String;
 	using ip_address_t 				= IPAddress;
+	using ip_addresses_t			= std::vector<IPAddress>;
+	using mac_address_t				= uint8_t;
 	using rfid_t					= MFRC522;
 	using rfid_key_t				= MFRC522::MIFARE_Key;
 	using rfid_picc_t				= MFRC522::PICC_Type;
@@ -23,21 +26,21 @@ namespace {
 }
 
 
-typedef struct _wlan_network{
+struct wlan_network_t{
 	string_t		ssid;
 	int32_t			rssi;
 	uint8_t			encryption_type;
 	uint8_t			*bssid;
 	int32_t			channel;
 	bool			is_hidden;
-} wlan_network_t;
+};
 
 
-typedef struct _datetime{
+struct datetime_t{
 	unsigned long	years;
 	unsigned long	months;
 	unsigned long	days;
 	unsigned long	hours;
 	unsigned long	minutes;
 	float			seconds;
-} datetime_t;
+};
