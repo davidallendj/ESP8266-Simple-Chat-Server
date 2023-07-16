@@ -1,10 +1,3 @@
-// TODO: Replace "Submit" with asynchronous AJAX calls (DONE!)
-// TODO: Minimize data being sent when make a request from server (DONE!)
-// TODO: Use event source to only push data to clients instead of constant polling (DONE!)
-// TODO: Use sockets instead of event source to handle client connects/disconnects??
-// TODO: Get DNS service working properly
-// TODO: Use captive portal to redirect connections to web page
-// TODO: Allow multiple esp8266 to "link up" (i.e. use one as station and redirect other traffic??)
 #include "include/message.h"
 #include "include/rfid.h"
 #include "include/utils.h"
@@ -172,6 +165,12 @@ void setup() {
 
 	(pass) ? WiFi.softAP(ssid) : WiFi.softAP(ssid, pass);
 	WiFi.hostname(DOMAIN_NAME);
+	
+	while(WiFi.status() != WL_CONNECTED){
+		Serial.println("Waiting to connect to WiFi...");
+		delay(100);
+	}
+
 
 	// Initialize SPI and rfid
 	SPI.begin();
@@ -181,10 +180,16 @@ void setup() {
 	Serial.print("ip address: \nsoftap: " + WiFi.softAPIP().toString() + "\ndns ip: ");
 	Serial.println(WiFi.dnsIP().toString());
 
+
+	// Set up mDNS server
+	if(MDNS.begin("towk")){
+		Serial.println("mDNS started successfully");
+	}
+
 	// Set DNS server params
-	dns_server.setTTL(300);
-	dns_server.setErrorReplyCode(DNSReplyCode::ServerFailure);
-	dns_server.start(DNS_PORT, DOMAIN_NAME, ip_address_t(8,8,8,8));
+	// dns_server.setTTL(300);
+	// dns_server.setErrorReplyCode(DNSReplyCode::ServerFailure);
+	// dns_server.start(DNS_PORT, DOMAIN_NAME, ip_address_t(8,8,8,8));
 
 	// Initialize LittleFS
 	if (!LittleFS.begin()) {
@@ -251,6 +256,8 @@ void loop() {
 	if(Serial.available() > 0){
 		// Display characters on LCD
 		int ch = Serial.read();
+
+
 		// 'enter' key press event ch==0x0A
 		if(ch == 0x0A){
 			lcd.clear();
@@ -259,7 +266,6 @@ void loop() {
 		else
 			lcd.write(ch);
 	}
-
 	
 	// MDNS.update();
 	dns_server.processNextRequest();
